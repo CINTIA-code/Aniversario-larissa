@@ -8,17 +8,11 @@
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
 body{
+margin:0;
 background:#050510;
 overflow:hidden;
-height:100vh;
+font-family: Arial;
 color:white;
 }
 
@@ -30,24 +24,16 @@ left:0;
 
 .container{
 position:absolute;
-top:30px;
+top:20px;
 width:100%;
 text-align:center;
-z-index:3;
+z-index:2;
 }
 
 #contador{
-font-size:16px;
 letter-spacing:3px;
-color:#c8fff5;
-opacity:0.8;
-}
-
-.nome{
-margin-top:10px;
-font-size:18px;
-opacity:0.7;
-letter-spacing:4px;
+font-size:16px;
+color:#a0ffe6;
 }
 
 .mensagem{
@@ -56,11 +42,7 @@ bottom:40px;
 width:100%;
 text-align:center;
 display:none;
-font-size:15px;
-line-height:1.6;
 padding:20px;
-color:#e0f7ff;
-opacity:0.9;
 }
 
 </style>
@@ -69,99 +51,46 @@ opacity:0.9;
 
 <body>
 
-<canvas id="aurora"></canvas>
-<canvas id="particles"></canvas>
+<canvas id="canvas"></canvas>
 
 <div class="container">
 <div id="contador"></div>
-<div class="nome">Larissa</div>
 </div>
 
 <div class="mensagem" id="mensagem">
-
-Larissa,
-
-Existe algo em você  
-que não se explica  
-apenas se sente.  
-
-Seu jeito é leve  
-sua presença é rara  
-sua essência é única  
-
-Feliz aniversário ✨
-
+Larissa ✨  
+Feliz aniversário
 </div>
 
 <script>
 
-// CONTAGEM CORRETA
+// CONTAGEM
 
 var data = new Date("April 5, 2026 00:00:00").getTime();
 
-var x = setInterval(function(){
+setInterval(()=>{
 
-var agora = new Date().getTime();
-var distancia = data - agora;
+let agora = new Date().getTime();
+let distancia = data - agora;
 
-var dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
-var horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-var minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
-var segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+let dias = Math.floor(distancia/(1000*60*60*24));
+let horas = Math.floor((distancia%(1000*60*60*24))/(1000*60*60));
+let minutos = Math.floor((distancia%(1000*60*60))/(1000*60));
+let segundos = Math.floor((distancia%(1000*60))/1000);
 
-document.getElementById("contador").innerHTML =
+document.getElementById("contador").innerHTML=
 dias+"d "+horas+"h "+minutos+"m "+segundos+"s";
 
 if(distancia < 0){
-clearInterval(x);
-document.getElementById("contador").style.display="none";
 document.getElementById("mensagem").style.display="block";
 }
 
 },1000);
 
 
-// AURORA SUAVE
+// PARTICULAS IMAGEM
 
-const aurora = document.getElementById("aurora");
-const actx = aurora.getContext("2d");
-
-aurora.width = window.innerWidth;
-aurora.height = window.innerHeight;
-
-let hue = 0;
-
-function drawAurora(){
-
-actx.clearRect(0,0,aurora.width,aurora.height);
-
-let gradient = actx.createLinearGradient(
-0,
-Math.sin(hue)*200,
-aurora.width,
-aurora.height
-);
-
-gradient.addColorStop(0,"rgba(180,0,255,0.05)");
-gradient.addColorStop(0.3,"rgba(0,255,200,0.05)");
-gradient.addColorStop(0.6,"rgba(255,0,180,0.05)");
-gradient.addColorStop(1,"rgba(0,200,255,0.05)");
-
-actx.fillStyle = gradient;
-actx.fillRect(0,0,aurora.width,aurora.height);
-
-hue += 0.003;
-
-requestAnimationFrame(drawAurora);
-
-}
-
-drawAurora();
-
-
-// PARTICULAS SUAVES
-
-const canvas = document.getElementById("particles");
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
@@ -169,16 +98,38 @@ canvas.height = window.innerHeight;
 
 let particles = [];
 
-for(let i=0;i<120;i++){
+let image = new Image();
+image.src = "larissa.jpg";
+
+image.onload = function(){
+
+ctx.drawImage(image, canvas.width/2-150, canvas.height/2-200, 300, 400);
+
+let data = ctx.getImageData(0,0,canvas.width,canvas.height);
+
+for(let y=0;y<canvas.height;y+=4){
+for(let x=0;x<canvas.width;x+=4){
+
+let index = (y*canvas.width+x)*4;
+
+if(data.data[index+3] > 128){
 
 particles.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-size:Math.random()*1.5,
-speed:Math.random()*0.2
-})
+tx:x,
+ty:y
+});
 
 }
+
+}
+}
+
+animate();
+
+}
+
 
 function animate(){
 
@@ -186,24 +137,17 @@ ctx.clearRect(0,0,canvas.width,canvas.height);
 
 particles.forEach(p=>{
 
-p.y += p.speed;
+p.x += (p.tx-p.x)*0.02;
+p.y += (p.ty-p.y)*0.02;
 
-if(p.y > canvas.height){
-p.y = 0;
-}
-
-ctx.fillStyle="rgba(200,255,255,0.15)";
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-ctx.fill();
+ctx.fillStyle="rgba(180,255,255,0.6)";
+ctx.fillRect(p.x,p.y,1.5,1.5);
 
 });
 
 requestAnimationFrame(animate);
 
 }
-
-animate();
 
 </script>
 
