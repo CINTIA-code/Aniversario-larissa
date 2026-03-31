@@ -44,16 +44,6 @@ letter-spacing:5px;
 opacity:0.7;
 }
 
-.mensagem{
-position:absolute;
-bottom:40px;
-width:100%;
-text-align:center;
-display:none;
-padding:20px;
-line-height:1.6;
-}
-
 </style>
 
 </head>
@@ -65,18 +55,6 @@ line-height:1.6;
 <div class="container">
 <div id="contador"></div>
 <div class="nome">Larissa</div>
-</div>
-
-<div class="mensagem" id="mensagem">
-
-Larissa
-
-Existe algo em você  
-que não se explica  
-apenas se sente  
-
-Feliz aniversário ✨
-
 </div>
 
 <script>
@@ -97,10 +75,6 @@ let segundos = Math.floor((distancia%(1000*60))/1000);
 
 document.getElementById("contador").innerHTML=
 dias+"d "+horas+"h "+minutos+"m "+segundos+"s";
-
-if(distancia < 0){
-document.getElementById("mensagem").style.display="block";
-}
 
 },1000);
 
@@ -131,20 +105,33 @@ largura,
 altura
 );
 
-let data = ctx.getImageData(0,0,canvas.width,canvas.height);
+let imageData = ctx.getImageData(
+canvas.width/2 - largura/2,
+canvas.height/2 - altura/2,
+largura,
+altura
+);
 
-for(let y=0;y<canvas.height;y+=3){
-for(let x=0;x<canvas.width;x+=3){
+particles = [];
 
-let index = (y*canvas.width+x)*4;
+for(let y=0;y<altura;y+=2){
+for(let x=0;x<largura;x+=2){
 
-if(data.data[index+3] > 150){
+let index = (y * largura + x) * 4;
+
+let r = imageData.data[index];
+let g = imageData.data[index+1];
+let b = imageData.data[index+2];
+
+let brightness = (r+g+b)/3;
+
+if(brightness < 200){
 
 particles.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-tx:x,
-ty:y
+tx:canvas.width/2 - largura/2 + x,
+ty:canvas.height/2 - altura/2 + y
 });
 
 }
@@ -156,17 +143,16 @@ animate();
 
 }
 
-
 function animate(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height);
 
 particles.forEach(p=>{
 
-p.x += (p.tx-p.x)*0.02;
-p.y += (p.ty-p.y)*0.02;
+p.x += (p.tx-p.x)*0.03;
+p.y += (p.ty-p.y)*0.03;
 
-ctx.fillStyle="rgba(170,255,255,0.5)";
+ctx.fillStyle="rgba(180,255,255,0.6)";
 ctx.fillRect(p.x,p.y,1.3,1.3);
 
 });
