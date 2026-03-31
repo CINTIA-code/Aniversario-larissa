@@ -92,37 +92,40 @@ image.src = "larissa.png";
 
 image.onload = function(){
 
-let largura = 280;
-let altura = 360;
+let w = 260;
+let h = 340;
 
-let posX = canvas.width/2 - largura/2;
-let posY = canvas.height/2 - altura/2;
+let x = canvas.width/2 - w/2;
+let y = canvas.height/2 - h/2;
 
-ctx.drawImage(image,posX,posY,largura,altura);
+ctx.drawImage(image,x,y,w,h);
 
-let imageData = ctx.getImageData(posX,posY,largura,altura);
+let img = ctx.getImageData(x,y,w,h);
 
 particles = [];
 
-for(let y=0;y<altura;y+=2){
-for(let x=0;x<largura;x+=2){
+for(let i=0;i<img.data.length;i+=16){
 
-let index = (y * largura + x) * 4;
+let r = img.data[i];
+let g = img.data[i+1];
+let b = img.data[i+2];
 
-let alpha = imageData.data[index+3];
+let brightness = (r+g+b)/3;
 
-if(alpha > 120){
+if(brightness < 200){
+
+let px = (i/4)%w;
+let py = Math.floor((i/4)/w);
 
 particles.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-tx:posX + x,
-ty:posY + y
+tx:x+px,
+ty:y+py
 });
 
 }
 
-}
 }
 
 animate();
@@ -139,7 +142,7 @@ p.x += (p.tx-p.x)*0.03;
 p.y += (p.ty-p.y)*0.03;
 
 ctx.fillStyle="rgba(120,255,255,0.7)";
-ctx.fillRect(p.x,p.y,1.3,1.3);
+ctx.fillRect(p.x,p.y,1.2,1.2);
 
 });
 
