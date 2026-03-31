@@ -77,8 +77,6 @@ dias+"d "+horas+"h "+minutos+"m "+segundos+"s";
 },1000);
 
 
-// PARTICULAS
-
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -88,7 +86,7 @@ canvas.height = window.innerHeight;
 let particles = [];
 
 let image = new Image();
-image.src = "larissa.png";
+image.src = "alarissa.png";
 
 image.onload = function(){
 
@@ -106,13 +104,9 @@ particles = [];
 
 for(let i=0;i<img.data.length;i+=16){
 
-let r = img.data[i];
-let g = img.data[i+1];
-let b = img.data[i+2];
+let alpha = img.data[i+3];
 
-let brightness = (r+g+b)/3;
-
-if(brightness < 200){
+if(alpha > 120){
 
 let px = (i/4)%w;
 let py = Math.floor((i/4)/w);
@@ -141,8 +135,8 @@ particles.forEach(p=>{
 p.x += (p.tx-p.x)*0.03;
 p.y += (p.ty-p.y)*0.03;
 
-ctx.fillStyle="rgba(120,255,255,0.7)";
-ctx.fillRect(p.x,p.y,1.2,1.2);
+ctx.fillStyle="rgba(120,255,255,0.8)";
+ctx.fillRect(p.x,p.y,1.4,1.4);
 
 });
 
@@ -153,4 +147,4 @@ requestAnimationFrame(animate);
 </script>
 
 </body>
-</html> 
+</html>
