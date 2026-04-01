@@ -10,10 +10,11 @@
 
 body{
 margin:0;
-background:#020314;
+background:black;
 overflow:hidden;
 font-family: Arial, sans-serif;
 color:white;
+text-align:center;
 }
 
 canvas{
@@ -22,26 +23,22 @@ top:0;
 left:0;
 }
 
-.container{
+.texto{
 position:absolute;
-top:30px;
+top:20%;
 width:100%;
-text-align:center;
-z-index:2;
-}
-
-#contador{
-font-size:18px;
-letter-spacing:3px;
-color:#b8fff5;
-opacity:0.8;
+opacity:0;
+transition:2s;
 }
 
 .nome{
-margin-top:10px;
-font-size:18px;
-letter-spacing:5px;
-opacity:0.7;
+position:absolute;
+top:50%;
+width:100%;
+font-size:32px;
+letter-spacing:8px;
+opacity:0;
+transition:3s;
 }
 
 </style>
@@ -52,30 +49,16 @@ opacity:0.7;
 
 <canvas id="canvas"></canvas>
 
-<div class="container">
-<div id="contador"></div>
-<div class="nome">Larissa</div>
+<div class="texto" id="texto">
+05 de Abril de 2000<br>
+O universo começou a se mover...
+</div>
+
+<div class="nome" id="nome">
+Larissa
 </div>
 
 <script>
-
-var data = new Date("April 5, 2026 00:00:00").getTime();
-
-setInterval(()=>{
-
-let agora = new Date().getTime();
-let distancia = data - agora;
-
-let dias = Math.floor(distancia/(1000*60*60*24));
-let horas = Math.floor((distancia%(1000*60*60*24))/(1000*60*60));
-let minutos = Math.floor((distancia%(1000*60*60))/(1000*60));
-let segundos = Math.floor((distancia%(1000*60))/1000);
-
-document.getElementById("contador").innerHTML=
-dias+"d "+horas+"h "+minutos+"m "+segundos+"s";
-
-},1000);
-
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -83,66 +66,63 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let particles = [];
+let numbers = [];
 
-let image = new Image();
-image.src = "alarissa.png";
-
-image.onload = function(){
-
-let w = 260;
-let h = 340;
-
-let x = canvas.width/2 - w/2;
-let y = canvas.height/2 - h/2;
-
-ctx.drawImage(image,x,y,w,h);
-
-let img = ctx.getImageData(x,y,w,h);
-
-particles = [];
-
-for(let i=0;i<img.data.length;i+=16){
-
-let alpha = img.data[i+3];
-
-if(alpha > 120){
-
-let px = (i/4)%w;
-let py = Math.floor((i/4)/w);
-
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-tx:x+px,
-ty:y+py
+for(let i=0;i<500;i++){
+numbers.push({
+x: Math.random()*canvas.width,
+y: Math.random()*canvas.height,
+size: Math.random()*14,
+speed: Math.random()*0.5,
+number: Math.floor(Math.random()*10)
 });
-
-}
-
-}
-
-animate();
-
 }
 
 function animate(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height);
 
-particles.forEach(p=>{
+numbers.forEach(n=>{
 
-p.x += (p.tx-p.x)*0.03;
-p.y += (p.ty-p.y)*0.03;
+n.y += n.speed;
 
-ctx.fillStyle="rgba(120,255,255,0.8)";
-ctx.fillRect(p.x,p.y,1.4,1.4);
+if(n.y > canvas.height){
+n.y = 0;
+}
+
+ctx.fillStyle = "rgba(255,255,255,0.6)";
+ctx.font = n.size+"px Arial";
+ctx.fillText(n.number,n.x,n.y);
 
 });
 
 requestAnimationFrame(animate);
 
 }
+
+animate();
+
+
+// timeline
+
+setTimeout(()=>{
+document.getElementById("texto").style.opacity=1;
+},3000);
+
+setTimeout(()=>{
+document.getElementById("texto").innerHTML=
+"O tempo passou...<br>O universo evoluiu...";
+},8000);
+
+setTimeout(()=>{
+document.getElementById("texto").innerHTML=
+"05 de Abril de 2026";
+},13000);
+
+setTimeout(()=>{
+document.getElementById("nome").style.opacity=1;
+},16000);
+
 
 </script>
 
