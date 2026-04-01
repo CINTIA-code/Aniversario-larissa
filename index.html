@@ -3,20 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Para Larissa ✨</title>
 
 <style>
 
-body{
+*{
 margin:0;
-background: radial-gradient(circle at bottom, #020111 0%, #000000 100%);
-overflow:hidden;
-color:white;
-font-family: "Helvetica Neue", sans-serif;
-text-align:center;
+padding:0;
+box-sizing:border-box;
+font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-#stars{
+body{
+background: radial-gradient(ellipse at bottom, #020111 0%, #000000 100%);
+overflow:hidden;
+color:white;
+text-align:center;
+height:100vh;
+}
+
+#stars, #stars2, #stars3{
 position:absolute;
 width:100%;
 height:100%;
@@ -26,13 +33,27 @@ height:100%;
 position:absolute;
 background:white;
 border-radius:50%;
-opacity:0.7;
-animation: move 10s linear infinite;
+opacity:0.8;
+animation: move linear infinite;
 }
 
 @keyframes move{
-0%{transform:translateY(0)}
-100%{transform:translateY(-100vh)}
+from{transform:translateY(0)}
+to{transform:translateY(-100vh)}
+}
+
+.nebula{
+position:absolute;
+width:100%;
+height:100%;
+background: radial-gradient(circle at 30% 40%, rgba(120,0,255,0.2), transparent 60%),
+radial-gradient(circle at 70% 60%, rgba(0,200,255,0.2), transparent 60%);
+animation: nebulaMove 20s infinite alternate;
+}
+
+@keyframes nebulaMove{
+0%{transform:scale(1)}
+100%{transform:scale(1.2)}
 }
 
 #start{
@@ -40,11 +61,17 @@ position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-padding:15px 30px;
 border:1px solid white;
+padding:15px 35px;
+letter-spacing:4px;
 cursor:pointer;
-letter-spacing:3px;
 z-index:10;
+transition:0.5s;
+}
+
+#start:hover{
+background:white;
+color:black;
 }
 
 .texto{
@@ -53,7 +80,8 @@ top:40%;
 width:100%;
 opacity:0;
 transition:2s;
-font-size:20px;
+font-size:22px;
+letter-spacing:1px;
 line-height:1.8;
 padding:0 20px;
 }
@@ -62,10 +90,19 @@ padding:0 20px;
 position:absolute;
 top:50%;
 width:100%;
-font-size:40px;
-letter-spacing:10px;
+font-size:48px;
+letter-spacing:12px;
 opacity:0;
 transition:3s;
+}
+
+.sub{
+position:absolute;
+top:60%;
+width:100%;
+opacity:0;
+transition:3s;
+letter-spacing:3px;
 }
 
 </style>
@@ -74,48 +111,65 @@ transition:3s;
 
 <body>
 
+<div class="nebula"></div>
 <div id="stars"></div>
 
-<div id="start">✨ Iniciar ✨</div>
+<div id="start">INICIAR</div>
 
 <audio id="musica" loop>
 <source src="swim.mp3" type="audio/mpeg">
 </audio>
 
 <div class="texto" id="texto"></div>
+
 <div class="nome" id="nome">Larissa</div>
+<div class="sub" id="sub">05 de Abril de 2026</div>
 
 <script>
 
 // estrelas
 
+function createStars(){
+
 for(let i=0;i<200;i++){
 
-let star = document.createElement("div");
+let star=document.createElement("div");
 
 star.className="star";
+
 star.style.left=Math.random()*100+"%";
 star.style.top=Math.random()*100+"%";
-star.style.width=Math.random()*3+"px";
-star.style.height=star.style.width;
-star.style.animationDuration=(5+Math.random()*10)+"s";
+
+let size=Math.random()*2;
+
+star.style.width=size+"px";
+star.style.height=size+"px";
+
+star.style.animationDuration=(10+Math.random()*20)+"s";
 
 document.getElementById("stars").appendChild(star);
 
 }
+
+}
+
+createStars();
+
 
 // iniciar
 
 document.getElementById("start").addEventListener("click", function(){
 
 document.getElementById("musica").play();
-this.style.display="none";
 
-start();
+this.style.opacity=0;
+
+startTimeline();
 
 });
 
-function start(){
+
+function startTimeline(){
 
 setTimeout(()=>{
 texto.innerHTML="05 de Abril de 2000";
@@ -124,32 +178,36 @@ texto.style.opacity=1;
 
 setTimeout(()=>{
 texto.innerHTML="O universo começou a se expandir...";
-},7000);
+},8000);
 
 setTimeout(()=>{
 texto.innerHTML="Estrelas nasceram...";
-},12000);
+},14000);
+
+setTimeout(()=>{
+texto.innerHTML="Galáxias se formaram...";
+},20000);
 
 setTimeout(()=>{
 texto.innerHTML="O tempo passou...";
-},17000);
+},26000);
 
 setTimeout(()=>{
-texto.innerHTML="Entre bilhões de galáxias...";
-},22000);
-
-setTimeout(()=>{
-texto.innerHTML="Algo raro surgiu...";
-},27000);
-
-setTimeout(()=>{
-texto.innerHTML="05 de Abril de 2026";
+texto.innerHTML="Entre bilhões de estrelas...";
 },32000);
 
 setTimeout(()=>{
+texto.innerHTML="Algo raro surgiu...";
+},38000);
+
+setTimeout(()=>{
 texto.style.opacity=0;
+},44000);
+
+setTimeout(()=>{
 nome.style.opacity=1;
-},36000);
+sub.style.opacity=1;
+},47000);
 
 }
 
