@@ -23,6 +23,19 @@ top:0;
 left:0;
 }
 
+#start{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+color:white;
+border:1px solid white;
+padding:15px 30px;
+letter-spacing:3px;
+cursor:pointer;
+z-index:10;
+}
+
 .texto{
 position:absolute;
 top:20%;
@@ -47,6 +60,14 @@ transition:3s;
 
 <body>
 
+<div id="start" onclick="startMusic()">
+✨ Iniciar ✨
+</div>
+
+<audio id="musica" loop>
+<source src="swim.mp3.mp3" type="audio/mpeg">
+</audio>
+
 <canvas id="canvas"></canvas>
 
 <div class="texto" id="texto">
@@ -59,6 +80,12 @@ Larissa
 </div>
 
 <script>
+
+function startMusic(){
+document.getElementById("musica").play();
+document.getElementById("start").style.display="none";
+startAnimation();
+}
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -100,10 +127,9 @@ requestAnimationFrame(animate);
 
 }
 
+function startAnimation(){
+
 animate();
-
-
-// timeline
 
 setTimeout(()=>{
 document.getElementById("texto").style.opacity=1;
@@ -123,6 +149,7 @@ setTimeout(()=>{
 document.getElementById("nome").style.opacity=1;
 },16000);
 
+}
 
 </script>
 
