@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Para Larissa ✨</title>
 
 <style>
@@ -11,16 +10,31 @@
 body{
 margin:0;
 background:black;
-overflow:hidden;
-font-family: "Helvetica Neue", Arial;
 color:white;
+overflow:hidden;
+font-family: Arial, sans-serif;
 text-align:center;
 }
 
-canvas{
+#stars{
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+}
+
+.star{
 position:absolute;
-top:0;
-left:0;
+width:2px;
+height:2px;
+background:white;
+animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle{
+0%{opacity:0.2}
+50%{opacity:1}
+100%{opacity:0.2}
 }
 
 #start{
@@ -30,9 +44,8 @@ left:50%;
 transform:translate(-50%,-50%);
 border:1px solid white;
 padding:15px 30px;
-letter-spacing:3px;
 cursor:pointer;
-z-index:10;
+letter-spacing:2px;
 }
 
 .texto{
@@ -42,16 +55,15 @@ width:100%;
 opacity:0;
 transition:2s;
 font-size:18px;
-line-height:1.8;
-letter-spacing:1px;
+line-height:1.6;
 }
 
 .nome{
 position:absolute;
 top:50%;
 width:100%;
-font-size:34px;
-letter-spacing:10px;
+font-size:35px;
+letter-spacing:8px;
 opacity:0;
 transition:3s;
 }
@@ -62,109 +74,68 @@ transition:3s;
 
 <body>
 
-<div id="start">
-✨ Iniciar ✨
-</div>
+<div id="stars"></div>
+
+<div id="start">✨ Iniciar ✨</div>
 
 <audio id="musica" loop>
 <source src="swim.mp3" type="audio/mpeg">
 </audio>
 
-<canvas id="canvas"></canvas>
-
 <div class="texto" id="texto"></div>
-
-<div class="nome" id="nome">
-Larissa
-</div>
+<div class="nome" id="nome">Larissa</div>
 
 <script>
 
-// iniciar
-
-document.getElementById("start").addEventListener("click", function(){
-document.getElementById("musica").play();
-this.style.display="none";
-startAnimation();
-});
-
-
 // estrelas
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let stars = [];
-
-for(let i=0;i<300;i++){
-stars.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-size:Math.random()*2,
-speed:Math.random()*0.3
-});
+for(let i=0;i<200;i++){
+let star = document.createElement("div");
+star.className="star";
+star.style.left=Math.random()*100+"%";
+star.style.top=Math.random()*100+"%";
+star.style.animationDelay=Math.random()*3+"s";
+document.getElementById("stars").appendChild(star);
 }
 
-function animateStars(){
+// iniciar
 
-ctx.clearRect(0,0,canvas.width,canvas.height);
+document.getElementById("start").onclick=function(){
 
-stars.forEach(s=>{
+document.getElementById("musica").play();
+this.style.display="none";
 
-s.y += s.speed;
-
-if(s.y > canvas.height){
-s.y = 0;
-}
-
-ctx.fillStyle="white";
-ctx.fillRect(s.x,s.y,s.size,s.size);
-
-});
-
-requestAnimationFrame(animateStars);
+start();
 
 }
 
-
-// animação
-
-function startAnimation(){
-
-animateStars();
+function start(){
 
 setTimeout(()=>{
-document.getElementById("texto").style.opacity=1;
-document.getElementById("texto").innerHTML=
-"05 de Abril de 2000<br>O universo começou a se mover...";
-},3000);
+texto.innerHTML="05 de Abril de 2000<br>O universo começou...";
+texto.style.opacity=1;
+},2000);
 
 setTimeout(()=>{
-document.getElementById("texto").innerHTML=
-"O tempo passou...<br>O universo continuou se expandindo...";
-},9000);
+texto.innerHTML="O tempo passou...";
+},8000);
 
 setTimeout(()=>{
-document.getElementById("texto").innerHTML=
-"E entre bilhões de estrelas...<br>Algo raro estava sendo criado...";
-},15000);
+texto.innerHTML="Entre bilhões de estrelas...";
+},14000);
 
 setTimeout(()=>{
-document.getElementById("texto").innerHTML=
-"05 de Abril de 2026";
-},21000);
+texto.innerHTML="Algo raro nasceu...";
+},20000);
 
 setTimeout(()=>{
-document.getElementById("texto").style.opacity=0;
-document.getElementById("nome").style.opacity=1;
-},26000);
+texto.style.opacity=0;
+nome.style.opacity=1;
+},25000);
 
 }
 
 </script>
 
 </body>
-</html> 
+</html>
