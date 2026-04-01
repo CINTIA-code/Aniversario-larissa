@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Larissa ✨</title>
+<title>Para Larissa ✨</title>
 
 <style>
 
@@ -12,7 +12,7 @@ body{
 margin:0;
 background:black;
 overflow:hidden;
-font-family: Arial, sans-serif;
+font-family: "Helvetica Neue", Arial;
 color:white;
 text-align:center;
 }
@@ -28,7 +28,6 @@ position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-color:white;
 border:1px solid white;
 padding:15px 30px;
 letter-spacing:3px;
@@ -38,18 +37,21 @@ z-index:10;
 
 .texto{
 position:absolute;
-top:20%;
+top:30%;
 width:100%;
 opacity:0;
 transition:2s;
+font-size:18px;
+line-height:1.8;
+letter-spacing:1px;
 }
 
 .nome{
 position:absolute;
 top:50%;
 width:100%;
-font-size:32px;
-letter-spacing:8px;
+font-size:34px;
+letter-spacing:10px;
 opacity:0;
 transition:3s;
 }
@@ -60,20 +62,17 @@ transition:3s;
 
 <body>
 
-<div id="start" onclick="startMusic()">
+<div id="start">
 ✨ Iniciar ✨
 </div>
 
 <audio id="musica" loop>
-<source src="swim.mp3.mp3" type="audio/mpeg">
+<source src="swim.mp3" type="audio/mpeg">
 </audio>
 
 <canvas id="canvas"></canvas>
 
-<div class="texto" id="texto">
-05 de Abril de 2000<br>
-O universo começou a se mover...
-</div>
+<div class="texto" id="texto"></div>
 
 <div class="nome" id="nome">
 Larissa
@@ -81,11 +80,16 @@ Larissa
 
 <script>
 
-function startMusic(){
+// iniciar
+
+document.getElementById("start").addEventListener("click", function(){
 document.getElementById("musica").play();
-document.getElementById("start").style.display="none";
+this.style.display="none";
 startAnimation();
-}
+});
+
+
+// estrelas
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -93,61 +97,70 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let numbers = [];
+let stars = [];
 
-for(let i=0;i<500;i++){
-numbers.push({
-x: Math.random()*canvas.width,
-y: Math.random()*canvas.height,
-size: Math.random()*14,
-speed: Math.random()*0.5,
-number: Math.floor(Math.random()*10)
+for(let i=0;i<300;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+size:Math.random()*2,
+speed:Math.random()*0.3
 });
 }
 
-function animate(){
+function animateStars(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height);
 
-numbers.forEach(n=>{
+stars.forEach(s=>{
 
-n.y += n.speed;
+s.y += s.speed;
 
-if(n.y > canvas.height){
-n.y = 0;
+if(s.y > canvas.height){
+s.y = 0;
 }
 
-ctx.fillStyle = "rgba(255,255,255,0.6)";
-ctx.font = n.size+"px Arial";
-ctx.fillText(n.number,n.x,n.y);
+ctx.fillStyle="white";
+ctx.fillRect(s.x,s.y,s.size,s.size);
 
 });
 
-requestAnimationFrame(animate);
+requestAnimationFrame(animateStars);
 
 }
 
+
+// animação
+
 function startAnimation(){
 
-animate();
+animateStars();
 
 setTimeout(()=>{
 document.getElementById("texto").style.opacity=1;
+document.getElementById("texto").innerHTML=
+"05 de Abril de 2000<br>O universo começou a se mover...";
 },3000);
 
 setTimeout(()=>{
 document.getElementById("texto").innerHTML=
-"O tempo passou...<br>O universo evoluiu...";
-},8000);
+"O tempo passou...<br>O universo continuou se expandindo...";
+},9000);
+
+setTimeout(()=>{
+document.getElementById("texto").innerHTML=
+"E entre bilhões de estrelas...<br>Algo raro estava sendo criado...";
+},15000);
 
 setTimeout(()=>{
 document.getElementById("texto").innerHTML=
 "05 de Abril de 2026";
-},13000);
+},21000);
 
 setTimeout(()=>{
+document.getElementById("texto").style.opacity=0;
 document.getElementById("nome").style.opacity=1;
-},16000);
+},26000);
 
 }
 
